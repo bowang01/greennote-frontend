@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { request } from '../api/client.ts'
 
-type Member = { id: number; username: string; nickname: string; status: number }
+type Member = { id: string; username: string; nickname: string; status: number }
 type Page = { list: Member[]; total: number }
 
 export function MembersPage() {

@@ -19,7 +19,9 @@ body {
 }
 
 button,
-input {
+input,
+textarea,
+select {
   font: inherit;
 }
 
@@ -170,14 +172,18 @@ label {
   font-size: 0.92rem;
 }
 
-input {
+input,
+textarea,
+select {
   border: 1px solid #e0d8c8;
   background: #fff;
   border-radius: 12px;
   padding: 0.75rem 0.85rem;
 }
 
-input:focus {
+input:focus,
+textarea:focus,
+select:focus {
   outline: 2px solid #b7dcc8;
   border-color: var(--brand, #1b6b45);
 }
@@ -221,4 +227,115 @@ input:focus {
   border-radius: 50%;
   object-fit: cover;
   background: #efe8da;
+}
+
+.avatar.tiny,
+.note-author img {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #efe8da;
+}
+
+.note-author {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #5d6b63;
+  font-size: 0.9rem;
+}
+
+.channel-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.2rem 0;
+}
+
+.note-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.9rem;
+}
+
+.note-card {
+  display: grid;
+  gap: 0.35rem;
+  background: #fffdf8;
+  border: 1px solid #e6e1d6;
+  border-radius: 16px;
+  overflow: hidden;
+  padding-bottom: 0.7rem;
+}
+
+.note-card img,
+.note-cover {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: #efe8da;
+}
+
+.note-card strong,
+.note-card span {
+  padding: 0 0.7rem;
+}
+
+.note-card span,
+.note-detail .muted {
+  color: #5d6b63;
+  font-size: 0.9rem;
+}
+
+.note-images {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.note-images img {
+  width: 100%;
+  border-radius: 16px;
+}
+
+.comment-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.comment-list p {
+  margin: 0.2rem 0 0;
+}
+
+.comment-form {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.comment-form input {
+  flex: 1;
+}
+
+.topic-picks {
+  border: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.topic-picks label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.profile-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.profile-links a {
+  color: var(--brand, #1b6b45);
 }

@@ -44,6 +44,7 @@ export function WebLayout() {
           </NavLink>
           {token ? (
             <>
+              <NavLink to="/publish">Publish</NavLink>
               <NavLink to="/profile">{username || 'Profile'}</NavLink>
               <button type="button" className="ghost" onClick={logout}>
                 Log out

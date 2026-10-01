@@ -1,14 +1,14 @@
 const TOKEN_KEY = 'greennote.admin.token'
 
 export type LoginResult = {
-  userId: number
+  userId: string
   username: string
   accessToken: string
   expiresAt: string
 }
 
 export type Profile = {
-  userId: number
+  userId: string
   username: string
 }
 
@@ -69,7 +69,7 @@ export async function request<T>(path: string, init: RequestInit = {}, auth = tr
   return body.data
 }
 
-export async function upload(path: string, file: File): Promise<{ id: number; url: string; name: string }> {
+export async function upload(path: string, file: File): Promise<{ id: string; url: string; name: string }> {
   const headers = new Headers()
   const token = readToken()
   if (token) {
@@ -78,7 +78,7 @@ export async function upload(path: string, file: File): Promise<{ id: number; ur
   const body = new FormData()
   body.append('file', file)
   const response = await fetch(path, { method: 'POST', body, headers })
-  const payload = (await response.json()) as ApiBody<{ id: number; url: string; name: string }>
+  const payload = (await response.json()) as ApiBody<{ id: string; url: string; name: string }>
   if (!response.ok || payload.code !== 0) {
     throw new ApiError(payload.msg || 'Upload failed', response.status || payload.code)
   }

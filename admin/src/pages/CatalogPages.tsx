@@ -13,7 +13,7 @@ function useRows<T>(path: string) {
 }
 
 export function DepartmentsPage() {
-  const { rows, error } = useRows<{ id: number; name: string; sortNo: number; status: number }>('/api/admin/departments')
+  const { rows, error } = useRows<{ id: string; name: string; sortNo: number; status: number }>('/api/admin/departments')
   return (
     <section>
       <h1>Departments</h1>
@@ -73,7 +73,7 @@ export function DictionariesPage() {
 }
 
 export function FilesPage() {
-  const { rows, error } = useRows<{ id: number; name: string; url: string; size: number }>('/api/admin/files')
+  const { rows, error } = useRows<{ id: string; name: string; url: string; size: number }>('/api/admin/files')
   return (
     <section>
       <h1>Files</h1>
@@ -109,7 +109,7 @@ export function FilesPage() {
 }
 
 export function LogsPage() {
-  const { rows, error } = useRows<{ id: number; operatorName: string; action: string; detail: string; createdAt: string }>('/api/admin/logs')
+  const { rows, error } = useRows<{ id: string; operatorName: string; action: string; detail: string; createdAt: string }>('/api/admin/logs')
   return (
     <section>
       <h1>Operation logs</h1>

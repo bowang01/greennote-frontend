@@ -1,10 +1,10 @@
 import { type FormEvent, useEffect, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { request, upload } from '../api/client.ts'
 import { useAuth } from '../auth/AuthContext.tsx'
 
 type Profile = {
-  userId: number
+  userId: string
   username: string
   nickname: string
   avatar: string
@@ -92,6 +92,11 @@ export function ProfilePage() {
         {error ? <p className="form-error">{error}</p> : null}
         {message ? <p>{message}</p> : null}
         <button type="submit">Save</button>
+        <nav className="profile-links">
+          <Link to="/mine">My notes</Link>
+          <Link to="/likes">Likes</Link>
+          <Link to="/collects">Collects</Link>
+        </nav>
       </form>
     </section>
   )

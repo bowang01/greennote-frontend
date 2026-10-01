@@ -4,7 +4,7 @@ import { request } from '../api/client.ts'
 import { useAuth } from '../auth/AuthContext.tsx'
 import { useSite } from '../site/SiteContext.tsx'
 
-type MenuItem = { id: number; name: string; path: string }
+type MenuItem = { id: string; name: string; path: string }
 type AdminProfile = { username: string; nickname: string; menus: MenuItem[] }
 
 export function AdminLayout() {
