@@ -1,0 +1,284 @@
+:root {
+  color: #1c241f;
+  background: #f3f6f1;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  background: var(--brand, #1b6b45);
+  color: #f7fbf8;
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--brand, #1b6b45);
+  border: 1px solid #c9ddd2;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.mark {
+  width: 0.9rem;
+  height: 1.15rem;
+  border-radius: 999px 999px 999px 0;
+  background: #d7f3e4;
+  display: inline-block;
+  transform: rotate(-18deg);
+}
+
+.mark.large {
+  width: 1.4rem;
+  height: 1.8rem;
+  background: #e7f6ee;
+}
+
+.login-screen {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(320px, 460px);
+}
+
+.login-brand {
+  background: #143d2c;
+  color: #f4fbf7;
+  padding: 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
+
+.login-brand h1,
+.login-card h2,
+.home h1 {
+  font-family: Palatino, "Palatino Linotype", "Iowan Old Style", serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.login-brand p,
+.lead,
+.cards p {
+  margin: 0;
+  color: #5d6b63;
+}
+
+.login-brand p {
+  color: #d5ebdf;
+  max-width: 22rem;
+}
+
+.login-card {
+  margin: auto;
+  width: min(100% - 2rem, 380px);
+  display: grid;
+  gap: 1rem;
+  padding: 1rem 0 2rem;
+}
+
+.login-card h2 {
+  font-size: 2rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.92rem;
+}
+
+input {
+  border: 1px solid #d5e0d8;
+  background: #fff;
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+}
+
+input:focus {
+  outline: 2px solid #b7dcc8;
+  border-color: var(--brand, #1b6b45);
+}
+
+.form-error {
+  margin: 0;
+  color: #9d2c2c;
+}
+
+.shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+}
+
+.sidebar {
+  background: #143d2c;
+  color: #f4fbf7;
+  padding: 1.4rem 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: Palatino, "Palatino Linotype", serif;
+  font-size: 1.35rem;
+  margin-bottom: 1.6rem;
+}
+
+.side-nav {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.side-nav a {
+  padding: 0.55rem 0.75rem;
+  border-radius: 10px;
+}
+
+.side-nav a.active {
+  background: #1f5a40;
+}
+
+.workspace {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 1.4rem;
+  background: #fff;
+  border-bottom: 1px solid #e4ece7;
+}
+
+.content {
+  padding: 1.6rem;
+}
+
+.home h1 {
+  font-size: 2.4rem;
+}
+
+.lead {
+  margin-top: 0.4rem;
+}
+
+.cards {
+  margin-top: 1.4rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.cards article {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1rem 1.1rem 1.2rem;
+  border: 1px solid #e4ece7;
+}
+
+.cards h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 800px) {
+  .login-screen,
+  .shell,
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .login-brand {
+    min-height: 180px;
+    padding: 1.5rem;
+  }
+
+  .sidebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .brand {
+    margin: 0;
+  }
+
+  .side-nav {
+    grid-auto-flow: column;
+    overflow-x: auto;
+  }
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid #e4ece7;
+  border-radius: 16px;
+  padding: 1rem 1.1rem 1.2rem;
+}
+
+.stack {
+  display: grid;
+  gap: 0.8rem;
+  max-width: 520px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 0.6rem 0.35rem;
+  border-bottom: 1px solid #e4ece7;
+}
+
+.toolbar {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0.2rem 0 1rem;
+}
+
+.logo-preview {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 8px;
+}
