@@ -41,7 +41,7 @@ export function HomePage() {
       <div className="cards">
         <article>
           <h2>Notes</h2>
-          <p>Review and publish controls come in the next step.</p>
+          <p>Review pending notes, then approve, reject, or take them offline.</p>
         </article>
         <article>
           <h2>Channels</h2>

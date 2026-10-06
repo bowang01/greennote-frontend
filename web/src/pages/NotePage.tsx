@@ -110,6 +110,11 @@ export function NotePage() {
         </span>
       </p>
       {note.status !== 2 ? <p className="form-error">{STATUS[note.status] ?? 'Unavailable'}</p> : null}
+      {token && (note.status === 0 || note.status === 1) ? (
+        <p>
+          <Link to={`/notes/${note.id}/edit`}>Edit</Link>
+        </p>
+      ) : null}
       {note.rejectReason ? <p className="form-error">{note.rejectReason}</p> : null}
       {note.type === 2 && note.videoUrl ? (
         <p>

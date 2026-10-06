@@ -298,6 +298,12 @@ select:focus {
   border-radius: 16px;
 }
 
+.note-images figure {
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
 .comment-list {
   list-style: none;
   padding: 0;

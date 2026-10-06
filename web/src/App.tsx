@@ -18,6 +18,7 @@ export default function App() {
           <Route element={<WebLayout />}>
             <Route index element={<DiscoverPage />} />
             <Route path="/notes/:id" element={<NotePage />} />
+            <Route path="/notes/:id/edit" element={<PublishPage />} />
             <Route path="/publish" element={<PublishPage />} />
             <Route path="/mine" element={<NoteListPage title="My notes" path="/api/member/notes/mine" />} />
             <Route path="/likes" element={<NoteListPage title="Likes" path="/api/member/notes/likes" />} />
