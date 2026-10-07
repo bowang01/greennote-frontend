@@ -1,22 +1,17 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { request } from '../api/client.ts'
+import { NoteWaterfall, type FeedNote } from '../components/NoteWaterfall.tsx'
 
 type Channel = { id: string; name: string }
-type NoteCard = {
-  id: string
-  title: string
-  coverUrl: string
-  authorName: string
-  authorAvatar: string
-  likeCount: number
-}
-type Page = { list: NoteCard[]; total: number }
+type Page = { list: FeedNote[]; total: number }
 
 export function DiscoverPage() {
+  const [params] = useSearchParams()
+  const query = (params.get('q') ?? '').trim().toLowerCase()
   const [channels, setChannels] = useState<Channel[]>([])
   const [channelId, setChannelId] = useState<string | null>(null)
-  const [notes, setNotes] = useState<NoteCard[]>([])
+  const [notes, setNotes] = useState<FeedNote[]>([])
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -26,8 +21,8 @@ export function DiscoverPage() {
   }, [])
 
   useEffect(() => {
-    const query = channelId == null ? '' : `?channelId=${channelId}`
-    request<Page>(`/api/notes${query}`)
+    const search = channelId == null ? '' : `?channelId=${channelId}`
+    request<Page>(`/api/notes${search}`)
       .then((page) => {
         setNotes(page.list)
         setError('')
@@ -38,21 +33,21 @@ export function DiscoverPage() {
       })
   }, [channelId])
 
+  const visible = query
+    ? notes.filter((note) => note.title.toLowerCase().includes(query) || note.authorName.toLowerCase().includes(query))
+    : notes
+
   return (
-    <section className="discover">
-      <div className="discover-copy">
-        <h1>Discover</h1>
-        <p>Published notes, one channel at a time.</p>
-      </div>
-      <div className="channel-bar" role="tablist">
-        <button type="button" className={channelId == null ? '' : 'ghost'} onClick={() => setChannelId(null)}>
-          All
+    <section className="feed-page">
+      <div className="chip-row" role="tablist">
+        <button type="button" className={channelId == null ? 'chip active' : 'chip'} onClick={() => setChannelId(null)}>
+          For you
         </button>
         {channels.map((channel) => (
           <button
             key={channel.id}
             type="button"
-            className={channelId === channel.id ? '' : 'ghost'}
+            className={channelId === channel.id ? 'chip active' : 'chip'}
             onClick={() => setChannelId(channel.id)}
           >
             {channel.name}
@@ -60,25 +55,13 @@ export function DiscoverPage() {
         ))}
       </div>
       {error ? <p className="form-error">{error}</p> : null}
-      {notes.length === 0 && !error ? (
+      {visible.length === 0 && !error ? (
         <div className="empty" role="status">
-          <span className="mark large" aria-hidden="true" />
           <h2>No notes yet</h2>
-          <p>Published notes will show up here.</p>
+          <p>{query ? 'Nothing matches this search.' : 'Published notes will show up here.'}</p>
         </div>
       ) : (
-        <div className="note-grid">
-          {notes.map((note) => (
-            <Link key={note.id} className="note-card" to={`/notes/${note.id}`}>
-              {note.coverUrl ? <img src={note.coverUrl} alt="" /> : <div className="note-cover" />}
-              <strong>{note.title}</strong>
-              <span className="note-author">
-                {note.authorAvatar ? <img src={note.authorAvatar} alt="" /> : <span className="avatar tiny" />}
-                {note.authorName} · {note.likeCount} likes
-              </span>
-            </Link>
-          ))}
-        </div>
+        <NoteWaterfall notes={visible} />
       )}
     </section>
   )

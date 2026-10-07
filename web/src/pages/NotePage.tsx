@@ -8,6 +8,7 @@ type NoteDetail = {
   id: string
   title: string
   content: string
+  authorId: string
   authorName: string
   authorAvatar: string
   channelName: string
@@ -24,6 +25,20 @@ type NoteDetail = {
   commentCount: number
   liked: boolean
   collected: boolean
+}
+
+function userIdFromToken(token: string): string | null {
+  const part = token.split('.')[1]
+  if (!part) {
+    return null
+  }
+  try {
+    const json = atob(part.replace(/-/g, '+').replace(/_/g, '/'))
+    const payload = JSON.parse(json) as { uid?: string }
+    return payload.uid ?? null
+  } catch {
+    return null
+  }
 }
 
 const STATUS: Record<number, string> = {
@@ -110,7 +125,7 @@ export function NotePage() {
         </span>
       </p>
       {note.status !== 2 ? <p className="form-error">{STATUS[note.status] ?? 'Unavailable'}</p> : null}
-      {token && (note.status === 0 || note.status === 1) ? (
+      {token && note.authorId === userIdFromToken(token) ? (
         <p>
           <Link to={`/notes/${note.id}/edit`}>Edit</Link>
         </p>
