@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 export type FeedNote = {
   id: string
+  authorId?: string
   title: string
   coverUrl: string | null
   authorName: string
@@ -18,25 +19,36 @@ const STATUS: Record<number, string> = {
 }
 
 export function NoteWaterfall({ notes, showStatus = false }: { notes: FeedNote[]; showStatus?: boolean }) {
+  const location = useLocation()
+
   return (
     <div className="waterfall">
       {notes.map((note) => (
-        <Link key={note.id} className="feed-card" to={`/notes/${note.id}`}>
-          <span className="feed-cover-wrap">
+        <article key={note.id} className="feed-card">
+          <Link className="feed-cover-wrap" to={`/notes/${note.id}`} state={{ backgroundLocation: location }}>
             {note.coverUrl ? <img src={note.coverUrl} alt="" /> : <span className="feed-cover" />}
-          </span>
-          <strong>{note.title}</strong>
+          </Link>
+          <Link className="feed-title" to={`/notes/${note.id}`} state={{ backgroundLocation: location }}>
+            {note.title}
+          </Link>
           <span className="feed-meta">
-            <span className="feed-author">
-              {note.authorAvatar ? <img src={note.authorAvatar} alt="" /> : <span className="avatar tiny" />}
-              {note.authorName}
-            </span>
+            {note.authorId ? (
+              <Link className="feed-author" to={`/users/${note.authorId}`}>
+                {note.authorAvatar ? <img src={note.authorAvatar} alt="" /> : <span className="avatar tiny" />}
+                {note.authorName}
+              </Link>
+            ) : (
+              <span className="feed-author">
+                {note.authorAvatar ? <img src={note.authorAvatar} alt="" /> : <span className="avatar tiny" />}
+                {note.authorName}
+              </span>
+            )}
             <span className="feed-like" aria-label={`${note.likeCount} likes`}>
               <Heart />
               {showStatus && note.status != null ? STATUS[note.status] ?? note.status : note.likeCount}
             </span>
           </span>
-        </Link>
+        </article>
       ))}
     </div>
   )

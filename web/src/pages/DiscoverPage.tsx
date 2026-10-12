@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { request } from '../api/client.ts'
+import { useAuth } from '../auth/AuthContext.tsx'
 import { NoteWaterfall, type FeedNote } from '../components/NoteWaterfall.tsx'
 
 type Channel = { id: string; name: string }
 type Page = { list: FeedNote[]; total: number }
 
 export function DiscoverPage() {
-  const [params] = useSearchParams()
-  const query = (params.get('q') ?? '').trim().toLowerCase()
+  const { token } = useAuth()
+  const navigate = useNavigate()
   const [channels, setChannels] = useState<Channel[]>([])
-  const [channelId, setChannelId] = useState<string | null>(null)
+  const [mode, setMode] = useState<string>('all')
   const [notes, setNotes] = useState<FeedNote[]>([])
   const [error, setError] = useState('')
 
@@ -21,8 +22,12 @@ export function DiscoverPage() {
   }, [])
 
   useEffect(() => {
-    const search = channelId == null ? '' : `?channelId=${channelId}`
-    request<Page>(`/api/notes${search}`)
+    if (mode === 'following' && !token) {
+      setNotes([])
+      return
+    }
+    const path = mode === 'following' ? '/api/member/notes/following' : mode === 'all' ? '/api/notes' : `/api/notes?channelId=${mode}`
+    request<Page>(path)
       .then((page) => {
         setNotes(page.list)
         setError('')
@@ -31,37 +36,44 @@ export function DiscoverPage() {
         setNotes([])
         setError(err instanceof Error ? err.message : 'Request failed')
       })
-  }, [channelId])
+  }, [mode, token])
 
-  const visible = query
-    ? notes.filter((note) => note.title.toLowerCase().includes(query) || note.authorName.toLowerCase().includes(query))
-    : notes
+  function openFollowing() {
+    if (!token) {
+      navigate('/login')
+      return
+    }
+    setMode('following')
+  }
 
   return (
     <section className="feed-page">
       <div className="chip-row" role="tablist">
-        <button type="button" className={channelId == null ? 'chip active' : 'chip'} onClick={() => setChannelId(null)}>
+        <button type="button" className={mode === 'following' ? 'chip active' : 'chip'} onClick={openFollowing}>
+          Following
+        </button>
+        <button type="button" className={mode === 'all' ? 'chip active' : 'chip'} onClick={() => setMode('all')}>
           For you
         </button>
         {channels.map((channel) => (
           <button
             key={channel.id}
             type="button"
-            className={channelId === channel.id ? 'chip active' : 'chip'}
-            onClick={() => setChannelId(channel.id)}
+            className={mode === channel.id ? 'chip active' : 'chip'}
+            onClick={() => setMode(channel.id)}
           >
             {channel.name}
           </button>
         ))}
       </div>
       {error ? <p className="form-error">{error}</p> : null}
-      {visible.length === 0 && !error ? (
+      {notes.length === 0 && !error ? (
         <div className="empty" role="status">
           <h2>No notes yet</h2>
-          <p>{query ? 'Nothing matches this search.' : 'Published notes will show up here.'}</p>
+          <p>{mode === 'following' ? 'Notes from people you follow will show up here.' : 'Published notes will show up here.'}</p>
         </div>
       ) : (
-        <NoteWaterfall notes={visible} />
+        <NoteWaterfall notes={notes} />
       )}
     </section>
   )

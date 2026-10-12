@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider, useAuth } from './auth/AuthContext.tsx'
 import { AdminLayout } from './layouts/AdminLayout.tsx'
 import { DepartmentsPage, DictionariesPage, FilesPage, LogsPage } from './pages/CatalogPages.tsx'
+import { CreatorsPage, NoticesPage, ReportsPage } from './pages/GovernancePages.tsx'
 import { HomePage } from './pages/HomePage.tsx'
 import { LoginPage } from './pages/LoginPage.tsx'
 import { ChannelsPage } from './pages/ChannelsPage.tsx'
@@ -31,6 +32,9 @@ export default function App() {
             <Route path="/channels" element={<ChannelsPage />} />
             <Route path="/topics" element={<TopicsPage />} />
             <Route path="/notes" element={<NotesPage />} />
+            <Route path="/reports" element={<ReportsPage />} />
+            <Route path="/notices" element={<NoticesPage />} />
+            <Route path="/creators" element={<CreatorsPage />} />
             <Route path="/site" element={<SitePage />} />
             <Route path="/departments" element={<DepartmentsPage />} />
             <Route path="/dictionaries" element={<DictionariesPage />} />

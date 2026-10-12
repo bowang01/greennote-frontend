@@ -2,6 +2,7 @@ import { type FormEvent, useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { request } from '../api/client.ts'
 import { useAuth } from '../auth/AuthContext.tsx'
+import { NotePage } from '../pages/NotePage.tsx'
 import { PublishDialog } from '../pages/PublishPage.tsx'
 import { useSite } from '../site/SiteContext.tsx'
 
@@ -16,9 +17,6 @@ export function WebLayout() {
   const { token, logout } = useAuth()
   const { site } = useSite()
   const navigate = useNavigate()
-  const { pathname } = useLocation()
-  const editId = pathname.match(/^\/notes\/([^/]+)\/edit$/)?.[1] ?? null
-  const composing = pathname === '/publish' || Boolean(editId)
   const [profile, setProfile] = useState<MemberProfile | null>(null)
   const [query, setQuery] = useState('')
 
@@ -47,7 +45,7 @@ export function WebLayout() {
   function onSearch(event: FormEvent) {
     event.preventDefault()
     const text = query.trim()
-    navigate(text ? `/?q=${encodeURIComponent(text)}` : '/')
+    navigate(text ? `/search?q=${encodeURIComponent(text)}` : '/search')
   }
 
   return (
@@ -128,13 +126,28 @@ export function WebLayout() {
           <Outlet />
         </main>
       </div>
+    </div>
+  )
+}
+
+export function LocationOverlays() {
+  const { token } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const noteId = location.pathname.match(/^\/notes\/([^/]+)(?:\/edit)?$/)?.[1] ?? null
+  const editId = location.pathname.match(/^\/notes\/([^/]+)\/edit$/)?.[1] ?? null
+  const composing = location.pathname === '/publish' || Boolean(editId)
+
+  return (
+    <>
+      {noteId ? <NotePage noteId={noteId} /> : null}
       {composing && token ? (
         <PublishDialog
           noteId={editId}
-          onClose={() => navigate(editId ? `/notes/${editId}` : '/')}
+          onClose={() => navigate(editId ? `/notes/${editId}` : '/', { state: location.state })}
         />
       ) : null}
-    </div>
+    </>
   )
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 import { request } from '../api/client.ts'
 import { useAuth } from '../auth/AuthContext.tsx'
 
@@ -9,7 +9,8 @@ type InboxItem = {
   actorName: string
   actorAvatar: string | null
   noteId: string
-  noteTitle: string
+  noteTitle: string | null
+  title: string | null
   text: string | null
   createdAt: string | null
 }
@@ -17,7 +18,8 @@ type InboxItem = {
 const TABS = [
   { id: 'like', label: 'Likes' },
   { id: 'comment', label: 'Comments' },
-  { id: 'message', label: 'Messages' },
+  { id: 'follow', label: 'Follows' },
+  { id: 'system', label: 'Notices' },
 ] as const
 
 export function MessagesPage() {
@@ -67,28 +69,55 @@ export function MessagesPage() {
               ? 'Likes and collects on your notes show up here.'
               : tab === 'comment'
                 ? 'Comments on your notes show up here.'
-                : 'Direct messages are not available yet.'}
+                : tab === 'follow'
+                  ? 'New followers show up here.'
+                  : 'System notices show up here.'}
           </p>
         </div>
       ) : (
         <ul className="message-list">
           {items.map((item) => (
             <li key={`${item.kind}-${item.id}`}>
-              <Link to={`/notes/${item.noteId}`}>
-                {item.actorAvatar ? <img src={item.actorAvatar} alt="" /> : <span className="avatar tiny" />}
-                <span>
-                  <strong>{item.actorName}</strong>
-                  <em>
-                    {item.kind === 'like' ? 'liked' : item.kind === 'collect' ? 'collected' : 'commented on'} {item.noteTitle}
-                  </em>
-                  {item.text ? <p>{item.text}</p> : null}
-                </span>
-                {item.createdAt ? <time>{item.createdAt.replace('T', ' ').slice(0, 16)}</time> : null}
-              </Link>
+              <MessageRow item={item} />
             </li>
           ))}
         </ul>
       )}
     </section>
   )
+}
+
+function actionText(item: InboxItem) {
+  if (item.kind === 'like') {
+    return `liked ${item.noteTitle ?? 'your note'}`
+  }
+  if (item.kind === 'collect') {
+    return `collected ${item.noteTitle ?? 'your note'}`
+  }
+  if (item.kind === 'comment') {
+    return `commented on ${item.noteTitle ?? 'your note'}`
+  }
+  if (item.kind === 'follow') {
+    return 'followed you'
+  }
+  return item.title ?? 'sent a notice'
+}
+
+function MessageRow({ item }: { item: InboxItem }) {
+  const location = useLocation()
+  const body = (
+    <>
+      {item.actorAvatar ? <img src={item.actorAvatar} alt="" /> : <span className="avatar tiny" />}
+      <span>
+        <strong>{item.actorName || 'GreenNote'}</strong>
+        <em>{actionText(item)}</em>
+        {item.text ? <p>{item.text}</p> : null}
+      </span>
+      {item.createdAt ? <time>{item.createdAt.replace('T', ' ').slice(0, 16)}</time> : null}
+    </>
+  )
+  if (!item.noteId) {
+    return <div className="message-static">{body}</div>
+  }
+  return <Link to={`/notes/${item.noteId}`} state={{ backgroundLocation: location }}>{body}</Link>
 }
